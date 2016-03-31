@@ -1,6 +1,7 @@
 package com.jasonzhong.sensibilltestjason.adapters;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,8 +57,11 @@ public class DisplayAdapter extends RecyclerView.Adapter<DisplayAdapter.CustomVi
 
         public CustomViewHolder(View view) {
             super(view);
+            Typeface boldTypeface = Typeface.createFromAsset(context.getAssets(), "fonts/Roboto-Bold.ttf");
             this.nameTextView = (TextView) view.findViewById(R.id.nameTextView);
+            this.nameTextView.setTypeface(boldTypeface);
             this.amountTextView = (TextView) view.findViewById(R.id.amountTextView);
+            this.amountTextView.setTypeface(boldTypeface);
             this.dateTextView = (TextView) view.findViewById(R.id.dateTextView);
         }
     }
