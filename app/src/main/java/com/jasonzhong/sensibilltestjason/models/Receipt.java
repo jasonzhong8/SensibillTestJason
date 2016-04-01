@@ -3,7 +3,7 @@ package com.jasonzhong.sensibilltestjason.models;
 /**
  * Created by jason.zhong on 31/03/2016.
  */
-public class Display {
+public class Receipt {
     private String name;
     private String amount;
     private String date;

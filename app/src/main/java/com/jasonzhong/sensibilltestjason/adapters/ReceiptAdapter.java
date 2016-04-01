@@ -9,23 +9,24 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.jasonzhong.sensibilltestjason.R;
-import com.jasonzhong.sensibilltestjason.models.Display;
+import com.jasonzhong.sensibilltestjason.models.Receipt;
 
 import java.util.List;
 
 /**
  * Created by jason.zhong on 31/03/2016.
  */
-public class DisplayAdapter extends RecyclerView.Adapter<DisplayAdapter.CustomViewHolder> {
+public class ReceiptAdapter extends RecyclerView.Adapter<ReceiptAdapter.CustomViewHolder> {
 
     static Context context;
-    static private List<Display> displayItems;
+    static private List<Receipt> receiptItems;
     LayoutInflater inflater;
 
-    public DisplayAdapter(Context context) {
+    public ReceiptAdapter(Context context) {
         this.context = context;
         inflater = LayoutInflater.from(context);
     }
+
     @Override
     public CustomViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View view = inflater.inflate(R.layout.display_item, viewGroup, false);
@@ -36,20 +37,22 @@ public class DisplayAdapter extends RecyclerView.Adapter<DisplayAdapter.CustomVi
 
     @Override
     public void onBindViewHolder(CustomViewHolder customViewHolder, int i) {
-        Display displayItem = displayItems.get(i);
-        //Setting text view content
-        customViewHolder.nameTextView.setText(displayItem.getName());
-        customViewHolder.amountTextView.setText(displayItem.getAmount());
-        customViewHolder.nameTextView.setText(displayItem.getName());
+        Receipt receiptItem = receiptItems.get(i);
+        //Setting textView content
+        customViewHolder.nameTextView.setText(receiptItem.getName());
+        customViewHolder.amountTextView.setText(receiptItem.getAmount());
+        customViewHolder.nameTextView.setText(receiptItem.getName());
     }
-    public void setDisplayList(List<Display> displayItems) {
-        this.displayItems = displayItems;
+
+    public void setDisplayList(List<Receipt> displayItems) {
+        this.receiptItems = displayItems;
     }
 
     @Override
     public int getItemCount() {
-        return (null != displayItems ? displayItems.size() : 0);
+        return (null != receiptItems ? receiptItems.size() : 0);
     }
+
     public class CustomViewHolder extends RecyclerView.ViewHolder {
         protected TextView nameTextView;
         protected TextView amountTextView;
@@ -57,6 +60,7 @@ public class DisplayAdapter extends RecyclerView.Adapter<DisplayAdapter.CustomVi
 
         public CustomViewHolder(View view) {
             super(view);
+            //custom font
             Typeface boldTypeface = Typeface.createFromAsset(context.getAssets(), "fonts/Roboto-Bold.ttf");
             this.nameTextView = (TextView) view.findViewById(R.id.nameTextView);
             this.nameTextView.setTypeface(boldTypeface);

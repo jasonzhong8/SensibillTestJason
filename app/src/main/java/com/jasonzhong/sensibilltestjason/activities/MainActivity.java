@@ -10,10 +10,10 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.jasonzhong.sensibilltestjason.R;
-import com.jasonzhong.sensibilltestjason.adapters.DisplayAdapter;
-import com.jasonzhong.sensibilltestjason.models.Display;
-import com.jasonzhong.sensibilltestjason.models.DisplayObjectComparator;
-import com.jasonzhong.sensibilltestjason.services.DisplayService;
+import com.jasonzhong.sensibilltestjason.adapters.ReceiptAdapter;
+import com.jasonzhong.sensibilltestjason.models.Receipt;
+import com.jasonzhong.sensibilltestjason.models.ReceiptObjectComparator;
+import com.jasonzhong.sensibilltestjason.services.ReceiptService;
 
 import java.util.Collections;
 import java.util.List;
@@ -22,10 +22,10 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
-    @Bind(R.id.displayListRecyclerView) RecyclerView displayListRecyclerView;
+    @Bind(R.id.receiptListRecyclerView) RecyclerView receiptListRecyclerView;
     @Bind(R.id.progressbar_layout) FrameLayout progressbarLayout;
 
-    private DisplayAdapter displayListAdapter;
+    private ReceiptAdapter receiptListAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,23 +36,24 @@ public class MainActivity extends AppCompatActivity {
 
         progressbarLayout.setVisibility(View.VISIBLE);
 
-        displayListAdapter = new DisplayAdapter(this);
-        displayListRecyclerView.setAdapter(displayListAdapter);
-        displayListRecyclerView.setHasFixedSize(true);
+        receiptListAdapter = new ReceiptAdapter(this);
+        receiptListRecyclerView.setAdapter(receiptListAdapter);
+        receiptListRecyclerView.setHasFixedSize(true);
 
         //Layout manager for Recycler view
-        displayListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        receiptListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        DisplayService.getInstance(this).loadDisplays("https://getsensibill.com/api/tests/receipts",new DisplayService.DisplayItemHandler() {
+        //asynchronously webservice call
+        ReceiptService.getInstance(this).loadReceipts("https://getsensibill.com/api/tests/receipts", new ReceiptService.ReceiptItemHandler() {
             @Override
-            public void onSuccess(List<Display> list) {
-                sortAndDisplayResult(list);
+            public void onSuccess(List<Receipt> list) {
+                sortAndDisplayResult(list);//process on UI thread
             }
 
             @Override
             public void onError(String error) {
                 progressbarLayout.setVisibility(View.GONE);//remove progressBar
-                Toast.makeText(MainActivity.this, "Failed to get current display", Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "Failed to get current receipts", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -72,13 +73,14 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         ButterKnife.unbind(this);
     }
-    private void sortAndDisplayResult(List<Display> list){
+
+    private void sortAndDisplayResult(List<Receipt> list) {
         //sort this list alphabetically
-        DisplayObjectComparator comparator = new DisplayObjectComparator();
+        ReceiptObjectComparator comparator = new ReceiptObjectComparator();
         Collections.sort(list, comparator);
-        displayListAdapter.setDisplayList(list);
+        receiptListAdapter.setDisplayList(list);
         //update recyclerView
-        displayListAdapter.notifyDataSetChanged();
+        receiptListAdapter.notifyDataSetChanged();
         progressbarLayout.setVisibility(View.GONE);//remove progressBar
     }
 }
